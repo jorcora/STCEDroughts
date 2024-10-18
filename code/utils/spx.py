@@ -395,7 +395,7 @@ class SPXsLABEL:
     def voxel_metrics(self,labels, new_labels, metric = 'distance'):
         """
         noise estimation between the labels
-        or distance estimation
+        or distance estimation 
         """
         if metric == 'noise': 
             voxel_metric = 0
