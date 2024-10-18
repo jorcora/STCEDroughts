@@ -40,7 +40,7 @@ class EvalGDIScontext:
         self.ntimes_bootstrap = 100
         self.ratiosubset = 0.25
 
-        self.names_context_mask = ['SM_levels', 'RM_levels', 'LU_types', 'SZN_periods']
+        self.names_context_mask = ['RM_levels', 'LU_types', 'SZN_periods']
         self.merged_res = {context_obj: {} for context_obj in self.names_context_mask}
         self.ratio_locations = {context_obj: {} for context_obj in self.names_context_mask}
 

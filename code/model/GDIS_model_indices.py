@@ -177,7 +177,7 @@ class MY_MODEL(pl.LightningModule):
       # Compute the loss
       loss = self.loss(self.model_config, labels_hat, labels, masks, spx_labels = spx_labels, eps = hyp)  
       self.counter += 1 # Counter for the SPX method
-      
+      """
       # Plots
       if index in [10, 12, 15] and self.current_epoch in [0,1,2,3,4,5,6,7,8,9,10]: 
           # Define the path of the image      
@@ -192,7 +192,7 @@ class MY_MODEL(pl.LightningModule):
                                            hyp[0, 0].detach().cpu().numpy(),
                                            combined_labels[0, 0].detach().cpu().numpy(),
                                            path2save, print_format = self.experiment_config['Arguments']['print_format'])
-          
+      """ 
     else: 
       loss = self.loss(self.model_config, labels_hat, labels, masks)      
 

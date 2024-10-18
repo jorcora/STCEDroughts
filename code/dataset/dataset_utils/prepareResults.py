@@ -66,15 +66,7 @@ class PrepRES:
         lu_context = xr.where(lu_context.isin([5,6]), x = 2, y = lu_context)
 
         # >>> water conditions context information 
-        # this is going to be described by soil moisture levels and or by root moisture levels
-        # SOIL MOISTURE
-        ws_context = xr.open_zarr(os.path.join(self.dataset_config['root'], self.dataset_config['data_file'], 'surface_moisture.zarr'), consolidated = False)
-        ws_context = ws_context.transpose('time', 'lat', 'lon').chunk({'time': 1})
-        ws_context = ws_context['surface_moisture'].rename('SM_levels')
-        for class_id, n_level in enumerate(np.array([0.00, 0.10, 0.30, 0.50, 0.70, 1.00])): # levels
-            ws_context = xr.where(ws_context <= n_level, x = class_id + 1, y = ws_context) # start from 1 to avoid complications
-        ws_context -= 1 
-        # Surface moisture goes from 0.0 (wilting point - completely dry) to 1.0 (saturation - fully wet) CHECK
+        # this is going to be described by soil root moisture levels
         # ROOT MOISTURE
         rm_context = xr.open_zarr(os.path.join(self.dataset_config['root'], self.dataset_config['data_file'], 'root_moisture.zarr'), consolidated = False)
         rm_context = rm_context.transpose('time', 'lat', 'lon').chunk({'time': 1})
@@ -82,7 +74,7 @@ class PrepRES:
         for class_id, n_level in enumerate(np.array([0.00, 0.10, 0.30, 0.50, 0.70, 1.00])): # levels
             rm_context = xr.where(rm_context <= n_level, x = class_id + 1, y = rm_context) # start from 1 to avoid complications
         rm_context -= 1 
-        # Root moisture goes from 0.0 (wilting point - completely dry) to 1.0 (saturation - fully wet) CHECK
+        # Root moisture goes from 0.0 (wilting point - completely dry) to 1.0 (saturation - fully wet) 
         
         # >>> seasonal context information
         szn_context = xr.zeros_like(self.labels).rename('SZN_periods')
@@ -90,7 +82,7 @@ class PrepRES:
             szn_context = szn_context.where(~szn_context['time.season'].isin(szn_interval), other = class_id)
         
         # Combine the masks
-        self.context =  xr.merge([lu_context, ws_context, rm_context, szn_context],
+        self.context =  xr.merge([lu_context, rm_context, szn_context],
                                  join = 'outer').transpose('time', 'lat', 'lon').chunk({'time': 1})
         
         ######################  Miscellaneous  ######################### 

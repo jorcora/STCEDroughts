@@ -15,7 +15,6 @@ from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, TQDMProg
 # WANDB
 import wandb
 os.environ['WANDB_START_METHOD'] ="thread"
-os.environ['WANDB_API_KEY'] = '229ce048627a4df52c18535fc60bc92493f55202'
 os.environ['WANDB__SERVICE_WAIT'] = '300'
 wandb.login()
 
