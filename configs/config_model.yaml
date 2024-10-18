@@ -1,0 +1,101 @@
+# Model config file (fields related to ...)
+arch:
+    archs:
+        1D:
+            name: 'SHIFT4L'
+            model_init_file: '1Ds0'  
+            num_classes: 1 
+            in_channels_climate: 5 
+            encoder_1: 16 
+            encoder_2: 32 
+            encoder_3: 64 
+            encoder_4: 128 
+            decoder_4: 128 
+            decoder_3: 64  
+            decoder_2: 32 
+            decoder_1: 16
+            slope: 0.1  
+            dropout: 0.1 
+            momentum: 0.1 
+            PI: 0.01 
+            conv_kernel_size: (2,1,1)
+            last_conv_kernel_size: (1,1,1)
+            pool_kernel_size: (1,1,1)
+        2D: 
+            name: 'SHIFT4L' 
+            model_init_file: '2Ds0'  
+            num_classes: 1 
+            in_channels_climate: 5 
+            encoder_1: 16 
+            encoder_2: 32 
+            encoder_3: 64 
+            encoder_4: 128 
+            decoder_4: 128 
+            decoder_3: 64  
+            decoder_2: 32 
+            decoder_1: 16
+            slope: 0.1  
+            dropout: 0.1 
+            momentum: 0.1 
+            PI: 0.01 
+            conv_kernel_size: (1,3,3)
+            last_conv_kernel_size: (1,3,3)
+            pool_kernel_size: (1,2,2)
+        3D:
+            name: 'SHIFT4L' 
+            model_init_file: '3Ds0'  
+            num_classes: 1 
+            in_channels_climate: 5 
+            encoder_1: 16 
+            encoder_2: 32 
+            encoder_3: 64 
+            encoder_4: 128 
+            decoder_4: 128 
+            decoder_3: 64  
+            decoder_2: 32 
+            decoder_1: 16
+            slope: 0.1  
+            dropout: 0.1 
+            momentum: 0.1 
+            PI: 0.01 
+            conv_kernel_size: (2,3,3)
+            last_conv_kernel_size: (1,3,3)
+            pool_kernel_size: (1,2,2)
+        
+        1D_LSTM:
+            name: 'LSTM' 
+            model_init_file: 'LSTM_s0'  
+            num_classes: 1 
+            in_channels_climate: 5 
+            hidden_dims: 32 
+            n_layers: 3
+    
+SPX:
+    SPX: 0
+    split_method: 'slic'
+    npixels: 25 
+    metric: 'mean' 
+    metric_eps_score: 'conf_score_entr'
+    time_weight: true
+    softLabels: true
+    combined_labels: true
+    combined_losses: false
+    eps: 0.05
+    robustness: 
+        noise_level: 0.0
+        id_process: 0
+        n_process: 10 
+        gen_id: 0
+     
+optimizer:
+    lr: 0.001    
+    wd: 0.0  
+    loss:
+        type: 'FL' 
+        gamma: 1 
+        
+trainer:       
+    epochs: 10 
+    monitor: 'auroc' 
+    mselection: 'mselection' # metric to select the best model, higher values means a better model
+    early_stop: 500 # patience  

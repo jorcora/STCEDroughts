@@ -1,0 +1,139 @@
+# Dataset config file (fields related to ...)   
+GDIS:
+    # Paths and names of files 
+    root: '/home/jorcora/Location_Aware_AM/databases/GDIS'
+    data_file: 'esdc-8d-0.083deg-1x2160x4320-2.1.1'
+    labels_file: 'GDIS_EMDAT_droughts_masks.zarr'
+    climatology_mean_file: 'climatology_mean'
+    climatology_std_file: 'climatology_std' 
+    samples_info_file: 'SHIFT1500_2out07_pdroughtIn_4L' 
+    
+    # Variable selection
+    features:
+        - 'surface_moisture'
+        - 'root_moisture' 
+        - 'gross_primary_productivity' # left out (too many nans)
+        - 'transpiration' 
+        - 'air_temperature_2m'
+        - 'evaporation' 
+        - 'fapar_tip' # left out (too many nans)
+        - 'leaf_area_index' # left out (too many nans)
+    features_selected: [0,1,3,4,5] 
+    
+    # >>> Sample and dataloader specifications
+    # Extent of the data
+    lat_slice: "73.5, 28.5" 
+    lon_slice: "-20.0, 68.0" 
+    time_slice: "'January-2003','December-2015'" 
+    resolution: 0.0833 # conversion: pixel to km (1 pixel is 0.0833º and 1º is 111.1 km -> 1 pixel is +-9 km) 
+    
+    # Sample sizes
+    input_size: (126,126,10) 
+    output_size: (64,64,2)  
+
+    # Creation of samples
+    unfold_train: false 
+    unfold_val: false
+    unfold_test: true
+    
+    # Sample selection
+    load_past: true # Loads the reference of samples, if existing
+    n_samples: 1500 # number of samples for the random method (training and validation) 
+    overlap: 0.75 # level of overlap that activates the discard check for the NMS strategy 
+
+    # Sample refinement
+    min_p_drought: 0.1 # min percentage of drought to qualify as a drought sample for training and validation. 0.1 #:= min_pixels / output_size * 100
+    min_non_nan_content: 0.0 # removes samples with less than the minimum non-water content here specified. The value represents the number of pixels.
+    distr_mode: 'independent' # "independent" or "similar". Removes samples in train/val so they are closer with respect to the drought content distribution, or not
+    alpha: 0.05 # level of significance for the independent t-test if distr_mode is 'similar'
+    mf_sampler_train: 1 # multiplicative factor to increase/decrease the number of samples. Values bigger than 1 will add non drought samples to the dataloader
+    mf_sampler_val: 1 # multiplicative factor to increase/decrease the number of samples. Values bigger than 1 will add non drought samples to the dataloader
+    fixed_samples_train: false # fixes the samples seen (same for all epochs)
+    fixed_samples_val: true # (DO NOT MODIFY) fixes the samples seen (same for all epochs) 
+    
+    # Definition of events (purely for visualization purposes)
+    remove_very_small: true # remove very small drought objects. The size to qualify as such is defined in "min_pixels" 
+    min_pixels: 0 # remove drought objects with less than this number of pixels when creating the events
+    connect_small_objects: true # connects objects separated by "min_dist" (defined below) into one event 
+    min_dist: 115 # objects at less than "min_dist" are given the same label. "min_distance" is spatio-temporal. Euclidean in 3D dimension
+    same_for_all_times: true # the event mask is shared for all timesteps 
+    plot_events: true # save a dilated image of the events for reference
+    border3Dforms: (5,90,90) # dilation for the bounding forms around the events (to compute and visualize the boxed means locally). Dimensions are: time, lat, lon
+    plot_3Dforms: true # save the plotted 3D forms for reference
+    margins3Dforms: 5 # for visualization purposes, add a margin so the bounding boxes are not overlapped
+    vismargin: 4 # for visualization purposes. Related to map border (at the right and bottom side)
+
+    # Dataloader
+    batch_size: 1 # (DO NOT MODIFY) for best results (stochastic grad descent) and to perform sample normalization via batch normalization inner workings (on training)
+    num_workers: 16  
+    
+    # Transformation of samples
+    augment: false # activates augmentation on the training samples
+    augment_prob: 0.0 # probability of transforming a sample
+    
+    # Temporal selection and indices
+    idt_ref_in: [6,7] # indices defining the temporal correspondence of the output timesteps wrt to the input. Used for cropping and selection. 
+    idt: -1 # position to select when we have more than one timestep at the output to define the temporal instances
+
+    # Definition of the folds
+    folds:
+        F1:
+            fdata: 'data_py1'
+            train_slice:
+                - "'January-2003','December-2008'"  
+            val_slice:
+                - "'January-2009','December-2010'"  
+            test_slice:
+                - "'January-2011','December-2015'" 
+        F3:
+            fdata: 'data_py3'
+            train_slice:
+                - "'January-2011','December-2015'" 
+            val_slice:
+                - "'January-2003','December-2008'" 
+            test_slice:
+                - "'January-2009','December-2010'" 
+        F5:
+            fdata: 'data_py5'
+            train_slice:
+                - "'January-2009','December-2010'" 
+            val_slice:
+                - "'January-2011','December-2015'" 
+            test_slice:
+                - "'January-2003','December-2008'" 
+
+HWSD: 
+    # Paths and names of files  
+    root: '/home/jorcora/Location_Aware_AM/databases/HWSD'
+    context_file: 'HWSD.zarr'
+    map_dominant_context_file: 'map_dominant_context.pt'
+    
+    # Variable selection
+    features:
+        - 'CULTRF_2000'
+        - 'CULTIR_2000'
+        - 'CULT_2000'
+        - 'FOR_2000'
+        - 'GRS_2000'
+        - 'URB_2000'
+        - 'NVG_2000'
+        - 'WAT_2000'
+    features_selected: [0,1,2,3,4,5,6] 
+
+DInd:
+    # Paths and names of files  
+    root: '/home/jorcora/Location_Aware_AM/databases/DInd'
+    indices_file: 'indices.zarr'
+    
+    # Variable selection
+    features:  # take care, the order is important. The indices are also used for evaluation
+        - 'SPEI1'
+        - 'SPEI12' 
+        - 'CDI' # this index goes in reverse to the others (bigger means recovery) and it is a categorical variable ranging from 1 to 5
+        - 'EnsembleSMA'
+        - 'SMA' 
+    features_selected: [0, 1, 2, 3] # removed SMA because it ocludes a lot of drought pixels
+    
+    # Evaluation
+    ref_timescale: 'model' # choose between model/indices (this defines the object that is used as reference to interpolate)
+    commonMask: false # sets a common nan mask between all indices 
