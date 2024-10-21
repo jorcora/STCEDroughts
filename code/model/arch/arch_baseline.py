@@ -15,9 +15,6 @@ import torchvision.transforms.functional as TF
 # PYTORCH LIGHTNING
 import pytorch_lightning as pl
 
-# AM
-from .am import LAM
-
 class SHIFT4L(pl.LightningModule):
   def __init__(self, model_config):
     super().__init__()
