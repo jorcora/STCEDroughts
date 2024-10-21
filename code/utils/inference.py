@@ -17,7 +17,7 @@ import pickle
 import time
 
 # UTILS
-from utils import plot_GDIS_cm, plot_GDIS_map, plot_GDIS_signals, crop_variable, get_relevance_map, define_nonoverlaping_3Dforms
+from utils import plot_GDIS_cm, plot_GDIS_map, plot_GDIS_signals, crop_variable, define_nonoverlaping_3Dforms
 
 def do_inference(model, loader_test, dataset_config, save_path, print_format = 'png'):
     """Function to perform inference and evaluate model 
