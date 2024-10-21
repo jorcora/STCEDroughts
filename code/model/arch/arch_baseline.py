@@ -56,9 +56,6 @@ class SHIFT4L(pl.LightningModule):
     self.encoder_bn_2 = nn.BatchNorm3d(self.model_config['arch']['encoder_2'], **bnorm_params)
     self.encoder_bn_3 = nn.BatchNorm3d(self.model_config['arch']['encoder_3'], **bnorm_params)
     self.encoder_bn_4 = nn.BatchNorm3d(self.model_config['arch']['encoder_4'], **bnorm_params)
-    
-    # LOCATION ATTENTION MECHANISM
-    #self.LAM = LAM(self.model_config)
 
     # Decoder
     self.decoder_conv_4 = nn.Conv3d(self.model_config['arch']['decoder_4'], 
