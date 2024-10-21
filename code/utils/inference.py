@@ -79,8 +79,7 @@ def do_inference(model, loader_test, dataset_config, save_path, print_format = '
             print('inference_time_secs_it:', inference_time_secs_it, 'sec/loop over Europe')
             y_hat = res['output']
             labels = res['labels']
-            import sys
-            sys.exit()
+            
             # Correct for the empty border that is added in the superior and left side of the inputs
             # during the reconstruction step of the map
             masks = masks[:,:,:, 
