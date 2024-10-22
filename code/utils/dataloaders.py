@@ -295,6 +295,7 @@ def define_dataloaders(GDIS, experiment_config, dataset_config):
     loader_train = None
     loader_val = None
     loader_test = None
+    dataset_config['len_loader_train'] = 0
     
     if experiment_config['Arguments']['doFit']:
         
